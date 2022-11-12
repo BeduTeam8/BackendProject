@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes, Op } = require("sequelize");
 const sequelize = new Sequelize("sqlite::memory:");
 const User = require("../models/users");
-const Library = require("../models/libary");
+const Library = require("../models/library");
 
 async function signUp(req, res) {
 	return await User.create(req.body)

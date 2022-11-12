@@ -5,7 +5,7 @@ const crypto = require("crypto");
 const jwt = require("jsonwebtoken"); // Genera los JWT
 const secret = require("../config/secret");
 
-const Library = require("./libary");
+const Library = require("./library");
 const Rol = require("./rol");
 
 const User = sequelize.define("User", {
@@ -15,7 +15,7 @@ const User = sequelize.define("User", {
 		unique: true,
 		validate: {
 			isLowercase: true,
-			is: /^[a-zA-Z0-9_-]+$/,
+			is: /^[a-z0-9_-]+$/,
 		},
 	},
 

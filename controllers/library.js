@@ -1,4 +1,4 @@
-const Library = require("../models/libary");
+const Library = require("../models/library");
 const Book = require("../models/book");
 const User = require("../models/users");
 
