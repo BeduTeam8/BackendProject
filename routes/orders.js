@@ -48,7 +48,12 @@ auth.required,*/ getOrder
 		  #swagger.responses[200] = {
 				description: 'Order successfully obtained.',
 				schema: {
-					id: 1,
+					id : "101",
+    				user_id : "1",
+    				payment_amount : "420.69",
+    				order_date : "1969-04-20T06:00:00.000Z",
+    				createdAt: "2022-11-12T21:15:05.389Z",
+    				updatedAt: "2022-11-12T21:15:05.389Z"
 				}
 			}
 		  #swagger.responses[400] = {

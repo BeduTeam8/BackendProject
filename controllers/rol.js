@@ -4,6 +4,18 @@ const Rol = require("../models/rol");
 
 // create a role
 async function createRol(req, res) {
+	const reqrol = req.body.rol
+	const reqid =  req.body.id
+	const idfound = await Rol.findByPk(reqid)
+	const rolfound = await Rol.findOne({
+		where:{ rol:reqrol}
+    });
+	if (!!rolfound || !!idfound){
+		return res.status(409).json({
+			info : "Rol already exists in DB, try with another name Rol or ID Rol"
+		})
+	}
+	console.group(reqrol)
 	return await Rol.create(req.body)
 		.then((rol) => {
 			res.status(201).send({
@@ -12,6 +24,7 @@ async function createRol(req, res) {
 			});
 		})
 		.catch((error) => {
+			
 			res
 				.status(400)
 				.send({ info: "error in request", error: "description" + error });
@@ -60,8 +73,22 @@ async function getRoles(req, res) {
 
 // update specifc rol
 async function updateRol(req, res) {
+
 	return await Rol.findByPk(req.params.id)
+
+
+
 		.then((rol) => {
+			
+			for (const key in req.body) {
+				if (!rol[key]) {
+				return res
+						.status(400)
+						.json({ Error: "Attribute not update, attribute not valid" });
+				}
+			}
+
+
 			if (!rol) {
 				return res.status(404).send({
 					message: "Rol no encontrado",

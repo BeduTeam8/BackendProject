@@ -329,6 +329,9 @@
           },
           "400": {
             "description": "Bad Request"
+          },
+          "409": {
+            "description": "Conflict"
           }
         },
         "requestBody": {
@@ -3113,8 +3116,28 @@
                   "type": "object",
                   "properties": {
                     "id": {
-                      "type": "number",
-                      "example": 1
+                      "type": "string",
+                      "example": "101"
+                    },
+                    "user_id": {
+                      "type": "string",
+                      "example": "1"
+                    },
+                    "payment_amount": {
+                      "type": "string",
+                      "example": "420.69"
+                    },
+                    "order_date": {
+                      "type": "string",
+                      "example": "1969-04-20T06:00:00.000Z"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2022-11-12T21:15:05.389Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2022-11-12T21:15:05.389Z"
                     }
                   },
                   "xml": {
@@ -3127,8 +3150,28 @@
                   "type": "object",
                   "properties": {
                     "id": {
-                      "type": "number",
-                      "example": 1
+                      "type": "string",
+                      "example": "101"
+                    },
+                    "user_id": {
+                      "type": "string",
+                      "example": "1"
+                    },
+                    "payment_amount": {
+                      "type": "string",
+                      "example": "420.69"
+                    },
+                    "order_date": {
+                      "type": "string",
+                      "example": "1969-04-20T06:00:00.000Z"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2022-11-12T21:15:05.389Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2022-11-12T21:15:05.389Z"
                     }
                   },
                   "xml": {

@@ -57,7 +57,8 @@ async function updateReview(req, res) {
 		}
 
 		await Review.update(review, { where: { id: id } });
-		res.status(200).json(review_updated);
+		const reviewfinish = await Review.findByPk(id);
+		res.status(200).json(reviewfinish);
 	} catch (err) {
 		if (
 			["SequelizeValidationError", "SequelizeUniqueConstraintError"].includes(
