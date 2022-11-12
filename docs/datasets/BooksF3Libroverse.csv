@@ -1,0 +1,51 @@
+id,book_name,author_id,description,publication_date,category_id,categoryGenre,editorial_id,createdAt,updateAt,LibraryId
+1,The Front,38,Face to face full-range interface,2022-06-12T23:29:34Z,21,Crime|Drama|Mystery,2022-08-26T03:59:12Z,Date.now(),Date.now(),13
+2,Rammbock,36,Team-oriented real-time array,2022-08-28T04:56:07Z,11,Drama|Horror,2022-10-01T08:07:20Z,Date.now(),Date.now(),10
+3,"Boys of Baraka, The",25,Self-enabling object-oriented approach,2022-05-23T13:07:04Z,7,Documentary,2022-10-24T22:48:14Z,Date.now(),Date.now(),13
+4,Yuki & Nina,5,Seamless asymmetric migration,2022-04-06T23:11:49Z,21,Drama,2022-11-03T09:40:50Z,Date.now(),Date.now(),25
+5,High Heels (Tacones lejanos),47,Face to face local emulation,2022-09-13T19:34:59Z,23,Comedy|Drama,2022-01-10T04:58:10Z,Date.now(),Date.now(),12
+6,Force of Execution,32,Horizontal interactive middleware,2022-04-08T00:38:21Z,18,Action|Crime,2022-06-13T04:04:09Z,Date.now(),Date.now(),2
+7,$ (Dollars),28,Vision-oriented 6th generation process improvement,2022-03-04T08:52:46Z,8,Comedy|Crime|Drama,2022-03-21T23:22:25Z,Date.now(),Date.now(),23
+8,Back to the Secret Garden,22,Team-oriented multi-tasking system engine,2022-01-09T00:17:17Z,10,Adventure|Children|Fantasy,2022-01-04T07:30:35Z,Date.now(),Date.now(),23
+9,Von Richthofen and Brown,44,Face to face optimal knowledge user,2021-11-11T13:05:19Z,23,Action|Drama|War,2022-02-15T13:06:19Z,Date.now(),Date.now(),5
+10,Paranormal Activity,32,Re-engineered encompassing instruction set,2022-01-26T23:57:13Z,23,Horror|Thriller,2022-06-15T08:53:35Z,Date.now(),Date.now(),3
+11,Capital (Le capital),35,Stand-alone object-oriented superstructure,2022-06-02T10:42:19Z,3,Drama,2022-04-17T03:37:18Z,Date.now(),Date.now(),15
+12,Unstrung Heroes,14,Customer-focused client-driven concept,2022-10-04T01:15:54Z,3,Comedy|Drama,2022-06-02T13:38:57Z,Date.now(),Date.now(),11
+13,Escape From Tomorrow,8,Cloned reciprocal orchestration,2022-03-22T10:06:04Z,3,Drama|Fantasy|Horror,2022-01-23T19:12:41Z,Date.now(),Date.now(),2
+14,"Sword and the Dragon, The (Ilya Muromets)",8,Quality-focused object-oriented solution,2022-04-05T14:58:37Z,5,Adventure|Fantasy,2022-07-02T07:54:44Z,Date.now(),Date.now(),22
+15,Eva,21,Open-architected leading edge capability,2022-05-29T22:47:36Z,10,Drama|Fantasy|Sci-Fi,2022-07-18T15:13:28Z,Date.now(),Date.now(),10
+16,Sun Valley Serenade,22,Down-sized directional conglomeration,2022-03-23T11:50:38Z,19,Comedy|Musical|Romance,2022-09-12T20:31:25Z,Date.now(),Date.now(),11
+17,"White Dwarf, The (Valkoinen kääpiö)",38,Enterprise-wide bifurcated local area network,2022-10-02T18:32:08Z,21,Drama,2022-08-15T11:32:13Z,Date.now(),Date.now(),18
+18,Thirty-Five Something (Tout pour plaire),36,Innovative systemic policy,2022-08-30T14:40:39Z,5,Comedy,2022-10-02T20:31:21Z,Date.now(),Date.now(),12
+19,Friday the 13th Part 2,4,Persevering reciprocal circuit,2022-06-23T17:55:09Z,19,Horror,2022-01-05T18:44:38Z,Date.now(),Date.now(),5
+20,Persona,42,Future-proofed regional moratorium,2022-10-26T08:02:10Z,16,Drama,2021-11-08T12:14:47Z,Date.now(),Date.now(),19
+21,"Normal Heart, The",24,Down-sized foreground focus group,2022-03-24T13:52:39Z,21,Drama,2022-10-15T09:50:53Z,Date.now(),Date.now(),23
+22,Days and Nights,20,Quality-focused background orchestration,2022-10-01T04:07:46Z,6,Comedy|Drama,2022-09-27T08:33:51Z,Date.now(),Date.now(),8
+23,Undercover Blues,27,Inverse client-driven alliance,2022-04-27T15:00:28Z,21,Comedy|Crime,2022-07-18T23:10:43Z,Date.now(),Date.now(),3
+24,Charlie Chan's Greatest Case,13,Exclusive attitude-oriented collaboration,2021-11-12T11:34:41Z,18,Mystery,2022-02-25T12:45:53Z,Date.now(),Date.now(),12
+25,Overboard,6,Robust neutral array,2022-06-01T06:44:53Z,21,Comedy|Romance,2022-02-02T09:08:45Z,Date.now(),Date.now(),4
+26,Mommy,44,Focused eco-centric policy,2022-02-01T21:32:55Z,15,Drama,2021-12-31T10:46:11Z,Date.now(),Date.now(),2
+27,Prayers for Bobby,42,Grass-roots cohesive application,2022-10-20T17:03:20Z,11,Drama,2022-08-25T17:24:48Z,Date.now(),Date.now(),13
+28,Kung Phooey!,19,Centralized encompassing groupware,2022-01-30T10:01:31Z,2,Comedy,2022-03-09T16:47:22Z,Date.now(),Date.now(),18
+29,Strangers When We Meet,27,Right-sized directional attitude,2022-03-17T19:47:22Z,8,Drama,2022-02-12T06:53:23Z,Date.now(),Date.now(),14
+30,Catch Me If You Can,9,Advanced zero defect matrix,2022-05-16T23:37:05Z,7,Crime|Drama,2022-09-01T02:41:35Z,Date.now(),Date.now(),5
+31,"Little Help, A",1,Team-oriented directional task-force,2021-11-27T02:54:36Z,23,Comedy|Drama,2022-06-07T21:33:49Z,Date.now(),Date.now(),20
+32,Revolt of the Zombies,9,Profit-focused global throughput,2022-02-13T20:07:18Z,24,Horror|War,2022-08-20T06:53:46Z,Date.now(),Date.now(),20
+33,Slaughterhouse-Five,22,Front-line real-time workforce,2022-02-02T10:20:49Z,7,Comedy|Drama|Sci-Fi|War,2022-02-25T04:13:32Z,Date.now(),Date.now(),10
+34,"Monster Walks, The",16,Versatile bottom-line functionalities,2022-04-16T04:24:17Z,16,Horror,2022-02-04T09:31:13Z,Date.now(),Date.now(),7
+35,So Much So Fast,24,Extended zero defect approach,2022-02-03T14:24:00Z,13,Documentary,2022-01-14T16:20:29Z,Date.now(),Date.now(),25
+36,Max,33,Inverse impactful open architecture,2022-03-07T20:58:16Z,21,Drama,2022-09-21T03:20:03Z,Date.now(),Date.now(),1
+37,Squeeze,7,Business-focused well-modulated core,2022-04-02T22:05:57Z,22,Drama,2022-05-12T07:52:55Z,Date.now(),Date.now(),22
+38,Day & Night,35,Exclusive hybrid system engine,2022-06-20T07:47:46Z,14,Animation|Children,2022-03-14T11:16:36Z,Date.now(),Date.now(),23
+39,One 2 Ka 4,5,Ergonomic clear-thinking standardization,2022-04-30T08:16:26Z,4,Action|Comedy|Drama,2022-03-01T11:41:57Z,Date.now(),Date.now(),2
+40,Vice,38,Enhanced multi-tasking artificial intelligence,2022-05-08T09:10:01Z,23,Crime|Film-Noir|Mystery|Thriller,2021-12-09T09:46:42Z,Date.now(),Date.now(),24
+41,"Orphanage, The (Orfanato, El)",36,Reactive fault-tolerant success,2022-04-10T02:15:26Z,1,Drama|Horror|Mystery|Thriller,2022-01-11T04:33:05Z,Date.now(),Date.now(),19
+42,Wrong Turn 2: Dead End,9,Cross-platform cohesive flexibility,2021-11-18T19:00:19Z,12,Action|Horror|Thriller,2022-11-04T01:55:18Z,Date.now(),Date.now(),11
+43,Geronimo,40,Quality-focused impactful middleware,2022-10-22T11:12:38Z,11,Action|Western,2022-09-03T09:36:19Z,Date.now(),Date.now(),1
+44,"Loss of a Teardrop Diamond, The",12,Optimized next generation hierarchy,2022-01-26T13:01:00Z,3,Drama,2022-01-02T23:35:40Z,Date.now(),Date.now(),11
+45,Godzilla vs. Hedorah (Gojira tai Hedorâ) (Godzilla vs. The Smog Monster) ,50,Fully-configurable regional conglomeration,2021-12-26T12:23:15Z,17,Horror|Sci-Fi,2022-04-09T01:52:46Z,Date.now(),Date.now(),18
+46,Damned the Day I Met You,33,Re-contextualized modular process improvement,2022-10-22T16:21:13Z,20,Comedy,2022-01-23T20:35:10Z,Date.now(),Date.now(),11
+47,Captains Courageous,32,Secured foreground instruction set,2022-10-26T00:35:14Z,8,Adventure|Drama,2022-08-17T05:41:26Z,Date.now(),Date.now(),5
+48,"Story Written with Water, A (Mizu de kakareta monogatari)",45,Enterprise-wide global infrastructure,2022-09-24T11:32:41Z,22,Drama,2022-09-10T03:37:54Z,Date.now(),Date.now(),17
+49,La Luna,8,Secured value-added moderator,2022-01-11T06:07:54Z,3,Animation,2022-06-16T09:28:01Z,Date.now(),Date.now(),4
+50,Stay Alive,49,Multi-tiered mission-critical initiative,2021-11-18T14:32:43Z,17,Horror|Sci-Fi|Thriller,2022-03-18T16:56:17Z,Date.now(),Date.now(),5

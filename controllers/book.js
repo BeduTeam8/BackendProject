@@ -10,7 +10,7 @@ const Category = require("../models/category");
 const Editorial = require("../models/editorial");
 
 // import library model
-const Library = require("../models/libary");
+const Library = require("../models/library");
 
 function createBook(req, res) {
 	try {

@@ -19,7 +19,9 @@ const {
 
 router.get(
 	"/",
-	getUsers
+	getUsers,
+	authpassport,
+	auth.isAdmin
 	/*
   #swagger.tags = ['Users'];
   #swagger.summary = 'Get all users';
@@ -32,12 +34,15 @@ router.get(
 				about: ''
             }
   }
+  #swagger.security = [{
+               "bearer": []
+        }] 
   */
 );
 router.get(
 	"/id/:id",
-	authpassport,
-	auth.required,
+	// authpassport,
+	// auth.required,
 	getUser
 	/*
   #swagger.tags = ['Users'];
@@ -57,7 +62,7 @@ router.get(
               id: 1,
             }
   }
-  #swagger.responses[400] = {
+  #swagger.responses[404] = {
 			description: 'User not found.',
 			schema: {
 				error: 'User not found.'
@@ -75,9 +80,32 @@ router.post(
 	/*
   #swagger.tags = ['Users'];
   #swagger.summary = 'Sign up';
+  #swagger.description = 'API to sign up';
+  #swagger.consumes = ['application/json'];
+  #swagger.requestBody['signup'] = {
+		  in: 'body',
+		  required: true,
+		  type: 'object',
+		 schema: { $ref: "#/definitions/Users" }
+		}
+  #swagger.responses[200] = {
+			description: 'User successfully created.',
+  }
+#swagger.responses[400] = {
+			description: '01 Missing info Error. | 02 First and last name missing | 03 Validation Error | 04 Unique constraint Error | 05 Foreign Key Error',
+			schema: {
+				"01-message": "Content can not be empty!",
+				"02-message": "First and last name missing",
+				"03-message": "Validation Error",
+				"04-message": "Unique constraint Error",
+				"05-message": "Foreign Key Error"
+
+			}
+	}
+
   */
 );
-router.patch(
+router.put(
 	"/id/:id",
 	authpassport,
 	auth.required,
@@ -121,8 +149,8 @@ router.patch(
 );
 router.delete(
 	"/id/:id",
-	authpassport,
-	auth.isAdmin,
+	// authpassport,
+	// auth.isAdmin,
 	deleteUser /*
   #swagger.tags = ['Users'];
   #swagger.summary = 'Delete user';
@@ -154,7 +182,7 @@ router.delete(
 router.get(
 	"/search/atributos",
 	bringByAttributes /*
-  #swagger.tags = ['Users'];
+  #swagger.tags = ['User Filters'];
   #swagger.summary = 'Search user by attributes';
   #swagger.description = 'API to search user based on attributes';
   #swagger.consumes = ['application/json'];
@@ -181,16 +209,34 @@ router.get(
 );
 router.get(
 	"/search/rol/:rol",
-	authpassport,
-	auth.required,
+	// authpassport,
+	// auth.required,
 	bringByRol /*
-  #swagger.tags = ['Users'];
+  #swagger.tags = ['User Filters'];
   */
 );
 router.post(
 	"/logIn",
 	logIn /*
   #swagger.tags = ['Users'];
+  #swagger.summary = 'Log in';
+  #swagger.description = 'API to log in';
+  #swagger.consumes = ['application/json'];
+  #swagger.requestBody['test'] = {
+		  in: 'body',
+		  required: true,
+		  type: 'object',
+		  schema: { $ref: "#/definitions/Login" }
+		}
+		  #swagger.responses[200] = {
+			description: 'User successfully logged in.',
+		}
+		#swagger.responses[404] = {
+			description: 'User not found.',
+			schema: {
+				error: 'User not found.'
+			}
+		}
   */
 );
 module.exports = router;

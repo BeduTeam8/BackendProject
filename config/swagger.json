@@ -8,7 +8,11 @@
   "servers": [
     {
       "url": "http://localhost:3000/",
-      "description": "Local server"
+      "description": "LocalSqlite server"
+    },
+    {
+      "url": "http://localhost:5668/",
+      "description": "Local Postgress server"
     },
     {
       "url": "https://libroverse-production.up.railway.app/",
@@ -39,6 +43,22 @@
     {
       "name": "Libraries",
       "description": "Libraries API"
+    },
+    {
+      "name": "Roles",
+      "description": "Roles API for all the users"
+    },
+    {
+      "name": "User Filters",
+      "description": "User Filters API"
+    },
+    {
+      "name": "Reviews",
+      "description": "Reviews API"
+    },
+    {
+      "name": "Orders",
+      "description": "Orders API"
     }
   ],
   "paths": {
@@ -302,8 +322,19 @@
           },
           "400": {
             "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
-        }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     },
     "/users/id/{id}": {
@@ -360,6 +391,9 @@
             }
           },
           "400": {
+            "description": "Bad Request"
+          },
+          "404": {
             "description": "User not found.",
             "content": {
               "application/json": {
@@ -391,15 +425,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
           }
         },
         "security": [
@@ -408,7 +433,7 @@
           }
         ]
       },
-      "patch": {
+      "put": {
         "tags": [
           "Users"
         ],
@@ -557,12 +582,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
           }
         },
         "security": [
@@ -578,26 +597,94 @@
           "Users"
         ],
         "summary": "Sign up",
-        "description": "",
+        "description": "API to sign up",
         "parameters": [],
         "responses": {
-          "201": {
-            "description": "Created"
+          "200": {
+            "description": "User successfully created."
           },
           "400": {
-            "description": "Bad Request"
+            "description": "01 Missing info Error. | 02 First and last name missing | 03 Validation Error | 04 Unique constraint Error | 05 Foreign Key Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "01-message": {
+                      "type": "string",
+                      "example": "Content can not be empty!"
+                    },
+                    "02-message": {
+                      "type": "string",
+                      "example": "First and last name missing"
+                    },
+                    "03-message": {
+                      "type": "string",
+                      "example": "Validation Error"
+                    },
+                    "04-message": {
+                      "type": "string",
+                      "example": "Unique constraint Error"
+                    },
+                    "05-message": {
+                      "type": "string",
+                      "example": "Foreign Key Error"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "01-message": {
+                      "type": "string",
+                      "example": "Content can not be empty!"
+                    },
+                    "02-message": {
+                      "type": "string",
+                      "example": "First and last name missing"
+                    },
+                    "03-message": {
+                      "type": "string",
+                      "example": "Validation Error"
+                    },
+                    "04-message": {
+                      "type": "string",
+                      "example": "Unique constraint Error"
+                    },
+                    "05-message": {
+                      "type": "string",
+                      "example": "Foreign Key Error"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         },
         "requestBody": {
+          "in": "body",
+          "required": true,
+          "type": "object",
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "membersince": {
-                    "example": "any"
-                  }
-                }
+                "$ref": "#/components/schemas/Users"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Users"
               }
             }
           }
@@ -607,7 +694,7 @@
     "/users/search/atributos": {
       "get": {
         "tags": [
-          "Users"
+          "User Filters"
         ],
         "summary": "Search user by attributes",
         "description": "API to search user based on attributes",
@@ -679,7 +766,7 @@
     "/users/search/rol/{rol}": {
       "get": {
         "tags": [
-          "Users"
+          "User Filters"
         ],
         "description": "",
         "parameters": [
@@ -698,12 +785,6 @@
           },
           "400": {
             "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
           }
         }
       }
@@ -713,32 +794,63 @@
         "tags": [
           "Users"
         ],
-        "description": "",
+        "summary": "Log in",
+        "description": "API to log in",
         "parameters": [],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "User successfully logged in."
           },
           "400": {
             "description": "Bad Request"
           },
           "404": {
-            "description": "Not Found"
+            "description": "User not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "User not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "User not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           }
         },
         "requestBody": {
+          "in": "body",
+          "required": true,
+          "type": "object",
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "username": {
-                    "example": "any"
-                  },
-                  "userpass": {
-                    "example": "any"
-                  }
-                }
+                "$ref": "#/components/schemas/Login"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
               }
             }
           }
@@ -750,11 +862,42 @@
         "tags": [
           "Categories"
         ],
-        "description": "",
+        "summary": "Get all Categories",
+        "description": "API to get all Categories",
         "parameters": [],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "all Categories successfully obtained.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "1"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "1"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad Request"
@@ -765,7 +908,8 @@
         "tags": [
           "Categories"
         ],
-        "description": "",
+        "summary": "Create a new Category",
+        "description": "API to create a new Category",
         "parameters": [],
         "responses": {
           "201": {
@@ -780,6 +924,23 @@
           "403": {
             "description": "Forbidden"
           }
+        },
+        "requestBody": {
+          "description": "Category",
+          "required": true,
+          "type": "object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Category"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Category"
+              }
+            }
+          }
         }
       }
     },
@@ -788,7 +949,8 @@
         "tags": [
           "Categories"
         ],
-        "description": "",
+        "summary": "Get Categorie by Genre",
+        "description": "API to get Categorie based on Genre",
         "parameters": [
           {
             "name": "genre",
@@ -796,15 +958,77 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Genre that will be search",
+            "example": "action"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Category successfully obtained.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "genre": {
+                      "type": "string",
+                      "example": "action"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "genre": {
+                      "type": "string",
+                      "example": "action"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Category not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Category not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Category not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "401": {
             "description": "Unauthorized"
@@ -814,11 +1038,12 @@
           }
         }
       },
-      "patch": {
+      "put": {
         "tags": [
           "Categories"
         ],
-        "description": "",
+        "summary": "Update a Categories",
+        "description": "API to update a Category",
         "parameters": [
           {
             "name": "genre",
@@ -826,7 +1051,9 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Genre that will be updated",
+            "example": "action"
           }
         ],
         "responses": {
@@ -841,6 +1068,23 @@
           },
           "403": {
             "description": "Forbidden"
+          }
+        },
+        "requestBody": {
+          "description": "Category",
+          "required": true,
+          "type": "object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Category"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Category"
+              }
+            }
           }
         }
       },
@@ -848,7 +1092,8 @@
         "tags": [
           "Categories"
         ],
-        "description": "",
+        "summary": "Delete Category by Genre",
+        "description": "API to delete Category based on Genre",
         "parameters": [
           {
             "name": "genre",
@@ -856,15 +1101,47 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "genre that will be deleted",
+            "example": "action"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Category successfully deleted."
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Category not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Category not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Category not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "401": {
             "description": "Unauthorized"
@@ -880,11 +1157,42 @@
         "tags": [
           "Editorials"
         ],
-        "description": "",
+        "summary": "Get all Editorials",
+        "description": "API to get all Editorials",
         "parameters": [],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "all Editorials successfully obtained.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "1"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "1"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad Request"
@@ -895,7 +1203,8 @@
         "tags": [
           "Editorials"
         ],
-        "description": "",
+        "summary": "Create a new Editorial",
+        "description": "API to create a new Editorial",
         "parameters": [],
         "responses": {
           "201": {
@@ -910,6 +1219,23 @@
           "403": {
             "description": "Forbidden"
           }
+        },
+        "requestBody": {
+          "description": "Editorial",
+          "required": true,
+          "type": "object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Editorial"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Editorial"
+              }
+            }
+          }
         }
       }
     },
@@ -918,7 +1244,8 @@
         "tags": [
           "Editorials"
         ],
-        "description": "",
+        "summary": "Get Editorial by ID",
+        "description": "API to get Editorial based on Editorial ID",
         "parameters": [
           {
             "name": "name",
@@ -927,14 +1254,84 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Editorial ID that will be search",
+            "example": 1,
+            "schema": {
+              "type": "number"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Editorial successfully obtained.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Editorial not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Editorial not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Editorial not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "401": {
             "description": "Unauthorized"
@@ -944,11 +1341,12 @@
           }
         }
       },
-      "patch": {
+      "put": {
         "tags": [
           "Editorials"
         ],
-        "description": "",
+        "summary": "Update an Editorial",
+        "description": "API to update a Role",
         "parameters": [
           {
             "name": "name",
@@ -956,6 +1354,16 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Editorial ID that will be updated",
+            "example": 1,
+            "schema": {
+              "type": "number"
             }
           }
         ],
@@ -971,6 +1379,23 @@
           },
           "403": {
             "description": "Forbidden"
+          }
+        },
+        "requestBody": {
+          "description": "Editorial",
+          "required": true,
+          "type": "object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Editorial"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Editorial"
+              }
+            }
           }
         }
       },
@@ -978,7 +1403,8 @@
         "tags": [
           "Editorials"
         ],
-        "description": "",
+        "summary": "Delete Editorial by ID",
+        "description": "API to delete Editorial based on Editorial ID",
         "parameters": [
           {
             "name": "name",
@@ -987,14 +1413,54 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Editorial ID that will be deleted",
+            "example": 1,
+            "schema": {
+              "type": "number"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Editorial successfully deleted."
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Editorial not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Editorial not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Editorial not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "401": {
             "description": "Unauthorized"
@@ -1010,11 +1476,42 @@
         "tags": [
           "Books"
         ],
-        "description": "",
+        "summary": "Get all Books",
+        "description": "API to get all Books",
         "parameters": [],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "all Books successfully obtained.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "1"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "1"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad Request"
@@ -1025,7 +1522,8 @@
         "tags": [
           "Books"
         ],
-        "description": "",
+        "summary": "Create a new Book",
+        "description": "API to create a new Book",
         "parameters": [],
         "responses": {
           "201": {
@@ -1040,6 +1538,23 @@
           "403": {
             "description": "Forbidden"
           }
+        },
+        "requestBody": {
+          "description": "Book",
+          "required": true,
+          "type": "object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Book"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Book"
+              }
+            }
+          }
         }
       }
     },
@@ -1048,7 +1563,8 @@
         "tags": [
           "Books"
         ],
-        "description": "",
+        "summary": "Get Book by ID",
+        "description": "API to get Book based on Book ID",
         "parameters": [
           {
             "name": "id",
@@ -1056,15 +1572,77 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Book ID that will be search",
+            "example": 1
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Role successfully obtained.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Book not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Book not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Book not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "401": {
             "description": "Unauthorized"
@@ -1074,11 +1652,12 @@
           }
         }
       },
-      "patch": {
+      "put": {
         "tags": [
           "Books"
         ],
-        "description": "",
+        "summary": "Update a Book",
+        "description": "API to update a Book",
         "parameters": [
           {
             "name": "id",
@@ -1086,7 +1665,9 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Book ID that will be updated",
+            "example": 1
           }
         ],
         "responses": {
@@ -1101,6 +1682,23 @@
           },
           "403": {
             "description": "Forbidden"
+          }
+        },
+        "requestBody": {
+          "description": "Book",
+          "required": true,
+          "type": "object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Book"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Book"
+              }
+            }
           }
         }
       },
@@ -1108,7 +1706,8 @@
         "tags": [
           "Books"
         ],
-        "description": "",
+        "summary": "Delete Book by ID",
+        "description": "API to delete Book based on Book ID",
         "parameters": [
           {
             "name": "id",
@@ -1116,10 +1715,48 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Book ID that will be deleted",
+            "example": 1
           }
         ],
         "responses": {
+          "200": {
+            "description": "Book successfully deleted."
+          },
+          "400": {
+            "description": "Book not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Book not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Book not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
           "401": {
             "description": "Unauthorized"
           },
@@ -1134,11 +1771,42 @@
         "tags": [
           "Libraries"
         ],
-        "description": "",
+        "summary": "Get all Libraries",
+        "description": "API to get all Libraries",
         "parameters": [],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "all Libraries successfully obtained.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "1"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "1"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad Request"
@@ -1151,7 +1819,8 @@
         "tags": [
           "Libraries"
         ],
-        "description": "",
+        "summary": "Get Library by ID",
+        "description": "API to get Library based on Library ID",
         "parameters": [
           {
             "name": "id",
@@ -1159,15 +1828,77 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Library ID that will be search",
+            "example": 1
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Library successfully obtained.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Library not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Library not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Library not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "401": {
             "description": "Unauthorized"
@@ -1180,11 +1911,12 @@
           }
         }
       },
-      "patch": {
+      "put": {
         "tags": [
           "Libraries"
         ],
-        "description": "",
+        "summary": "Update a Library",
+        "description": "API to update a Library",
         "parameters": [
           {
             "name": "id",
@@ -1192,7 +1924,9 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Library ID that will be updated",
+            "example": 1
           }
         ],
         "responses": {
@@ -1208,13 +1942,31 @@
           "403": {
             "description": "Forbidden"
           }
+        },
+        "requestBody": {
+          "description": "Library",
+          "required": true,
+          "type": "object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Library"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Library"
+              }
+            }
+          }
         }
       },
       "delete": {
         "tags": [
           "Libraries"
         ],
-        "description": "",
+        "summary": "Delete Library by ID",
+        "description": "API to delete Library based on Library ID",
         "parameters": [
           {
             "name": "id",
@@ -1222,15 +1974,47 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Library ID that will be deleted",
+            "example": 1
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Library successfully deleted."
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Library not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Library not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Library not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "401": {
             "description": "Unauthorized"
@@ -1246,7 +2030,8 @@
         "tags": [
           "Libraries"
         ],
-        "description": "",
+        "summary": "Create a new Library",
+        "description": "API to create a new Library",
         "parameters": [],
         "responses": {
           "201": {
@@ -1261,11 +2046,1051 @@
           "403": {
             "description": "Forbidden"
           }
+        },
+        "requestBody": {
+          "description": "Library",
+          "required": true,
+          "type": "object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Library"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Library"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rol/": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Get all Roles",
+        "description": "API to get all Roles",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "all Roles successfully obtained.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "1"
+                    },
+                    "rol": {
+                      "type": "string",
+                      "example": "admin"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "1"
+                    },
+                    "rol": {
+                      "type": "string",
+                      "example": "admin"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Create a new Role",
+        "description": "API to create a new Role",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "requestBody": {
+          "description": "Rol",
+          "required": true,
+          "type": "object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Roles"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Roles"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rol/{id}": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Get Role by ID",
+        "description": "API to get Role based on Role ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Role ID that will be search",
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Role successfully obtained.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Role not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Role not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Role not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Update a Role",
+        "description": "API to update a Role",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Role ID that will be updated",
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "requestBody": {
+          "description": "Rol",
+          "required": true,
+          "type": "object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Roles"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Roles"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Delete Role by ID",
+        "description": "API to delete Role based on Role ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Role ID that will be deleted",
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Role successfully deleted."
+          },
+          "400": {
+            "description": "Role not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Role not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Role not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/review/": {
+      "get": {
+        "tags": [
+          "Reviews"
+        ],
+        "summary": "Get all Reviews",
+        "description": "API to get all Reviews",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "all Reviews successfully obtained."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Reviews"
+        ],
+        "summary": "Create a Review",
+        "description": "API to create a Review",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Review successfully created."
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Review not created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Review not created."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Review not created."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "in": "body",
+          "required": true,
+          "type": "object",
+          "description": "Review object that will be created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Reviews"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Reviews"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/review/{id}": {
+      "get": {
+        "tags": [
+          "Reviews"
+        ],
+        "summary": "Get Review by ID",
+        "description": "API to get Review based on Review ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Review ID that will be search",
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Review successfully obtained."
+          },
+          "400": {
+            "description": "Review not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Review not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Review not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Reviews"
+        ],
+        "summary": "Update a Review",
+        "description": "API to update a Review",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Review ID that will be updated",
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Review successfully updated."
+          },
+          "400": {
+            "description": "Review not updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Review not updated."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Review not updated."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "in": "body",
+          "required": true,
+          "type": "object",
+          "description": "Review object that will be updated",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Reviews"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Reviews"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Reviews"
+        ],
+        "summary": "Delete a Review",
+        "description": "API to delete a Review",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Review ID that will be deleted",
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Review successfully deleted."
+          },
+          "400": {
+            "description": "Review not deleted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Review not deleted."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Review not deleted."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/order/": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Get all Orders",
+        "description": "API to get all Orders",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "all Orders successfully obtained."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Create Order",
+        "description": "API to create Order",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Order successfully created."
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "requestBody": {
+          "in": "body",
+          "required": true,
+          "type": "object",
+          "description": "Order to be created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Orders"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Orders"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/order/{id}": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Get Order by ID",
+        "description": "API to get Order based on Order ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Order ID that will be search",
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order successfully obtained.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Order not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Order not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Order not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Update Order by ID",
+        "description": "API to update Order based on Order ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Order ID that will be updated",
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order successfully updated."
+          },
+          "400": {
+            "description": "Order not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Order not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Order not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "in": "body",
+          "required": true,
+          "type": "object",
+          "description": "Order to be created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Orders"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Orders"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Delete Order by ID",
+        "description": "API to delete Order based on Order ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Order ID that will be deleted",
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order successfully deleted."
+          },
+          "400": {
+            "description": "Order not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Order not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Order not found."
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
   },
   "components": {
+    "schemas": {
+      "Roles": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "2"
+          },
+          "rol": {
+            "type": "string",
+            "example": "user"
+          }
+        },
+        "xml": {
+          "name": "Roles"
+        }
+      },
+      "Users": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "kingofthenorth"
+          },
+          "userpass": {
+            "type": "string",
+            "example": "123456"
+          },
+          "firstname": {
+            "type": "string",
+            "example": "jon"
+          },
+          "lastname": {
+            "type": "string",
+            "example": "snow"
+          },
+          "address": {
+            "type": "string",
+            "example": "123 winderfell"
+          },
+          "email": {
+            "type": "string",
+            "example": "winter@fell.com"
+          },
+          "phonenumber": {
+            "type": "string",
+            "example": "1234567890"
+          },
+          "rol": {
+            "type": "string",
+            "example": "2"
+          }
+        },
+        "xml": {
+          "name": "Users"
+        }
+      },
+      "Library": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "King's Landing"
+          },
+          "description": {
+            "type": "string",
+            "example": "The capital of the seven kingdoms"
+          }
+        },
+        "xml": {
+          "name": "Library"
+        }
+      },
+      "Book": {
+        "type": "object",
+        "properties": {
+          "book_name": {
+            "type": "string",
+            "example": "A Game of thrones"
+          },
+          "author": {
+            "type": "string",
+            "example": "George RR martin"
+          },
+          "description": {
+            "type": "string",
+            "example": "a song of ice and fire"
+          },
+          "publication_date": {
+            "type": "string",
+            "example": "1996"
+          },
+          "category": {
+            "type": "string",
+            "example": "fantasy"
+          }
+        },
+        "xml": {
+          "name": "Book"
+        }
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "genre": {
+            "type": "string",
+            "example": "fantasy"
+          },
+          "description": {
+            "type": "string",
+            "example": "a genre of fiction"
+          }
+        },
+        "xml": {
+          "name": "Category"
+        }
+      },
+      "Login": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "kingofthenorth"
+          },
+          "userpass": {
+            "type": "string",
+            "example": "12345"
+          }
+        },
+        "xml": {
+          "name": "Login"
+        }
+      },
+      "Editorial": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Bantam Books"
+          },
+          "country": {
+            "type": "string",
+            "example": "mexico"
+          },
+          "editorial_desc": {
+            "type": "string",
+            "example": "a book publisher"
+          }
+        },
+        "xml": {
+          "name": "Editorial"
+        }
+      },
+      "Orders": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "example": "1"
+          },
+          "payment_amount": {
+            "type": "string",
+            "example": "420.69"
+          },
+          "order_date": {
+            "type": "string",
+            "example": "04/20/1969"
+          }
+        },
+        "xml": {
+          "name": "Orders"
+        }
+      },
+      "Reviews": {
+        "type": "object",
+        "properties": {
+          "review": {
+            "type": "string",
+            "example": "Lorem epsum my guy"
+          },
+          "rating": {
+            "type": "string",
+            "example": "5"
+          },
+          "user_id": {
+            "type": "string",
+            "example": "1"
+          },
+          "book_id": {
+            "type": "string",
+            "example": "1"
+          }
+        },
+        "xml": {
+          "name": "Reviews"
+        }
+      }
+    },
     "securitySchemes": {
       "bearer": {
         "type": "http",

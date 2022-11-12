@@ -5,17 +5,25 @@ const sequelize = require("./config/db");
 const routes = require("./routes/index");
 const auth = require("./config/auth");
 
+// inport helmet and cors
+const helmet = require("helmet");
+const cors = require("cors");
+
 const app = express();
 app.use(express.json());
 app.use(auth.optional);
 app.use("/", routes);
+
+// use helmet and use cors
+app.use(helmet());
+app.use(cors());
 
 try {
 	sequelize.authenticate().then(() => {
 		console.log("DB Authenticated");
 	});
 	sequelize.sync().then(() => {
-		console.log("DB syncronized");
+		console.log("DB syncronized " + process.env.NODE_ENV);
 	});
 
 	console.log("Connected to DB");

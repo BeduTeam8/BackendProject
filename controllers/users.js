@@ -1,39 +1,95 @@
+const { Sequelize, DataTypes, Op } = require("sequelize");
+const sequelize = new Sequelize("sqlite::memory:");
 const User = require("../models/users");
-const Library = require("../models/libary");
+const Library = require("../models/library");
 
 async function signUp(req, res) {
-	const body = req.body;
-	body.membersince = new Date().toDateString();
-	try {
-		const user = await User.create(body);
-		const { salt, hash } = await User.createPassword(body["userpass"]);
-		user.password_salt = salt;
-		user.password_hash = hash;
-		await user.save();
-		res.status(201).json({
-			Estado: "User created",
-			usuario: user.username,
-			firstname: user.firstname,
-			lastname: user.lastname,
-			address: user.address,
-			email: user.email,
-			phonenumber: user.phonenumber,
-			rol: user.rol,
-			membersince: user.membersince,
+	return await User.create(req.body)
+		.then((user) => {
+			const body = req.body;
+			// check if body has username password and email
+			if (!req.body.username || !req.body.userpass || !req.body.email) {
+				return res.status(400).send({
+					message: "You might be missing your username password or email!",
+				});
+			}
+			// if first name and last name is emp
+			if (!req.body.firstname || !req.body.lastname) {
+				return res.status(400).send({
+					message: "first and last name are missing!",
+				});
+			}
+			try {
+				// takes userpass into salt and hash
+				const { salt, hash } = User.createPassword(body["userpass"]);
+				user.password_hash = hash;
+				user.password_salt = salt;
+
+				// add member since date now
+				user.membersince = new Date().toDateString();
+
+				// if credit card exists hash it
+				if (req.body.credit_card) {
+					const card = User.hashCard(body["credit_card"], salt);
+					user.credit_card = card;
+				}
+
+				// if user does not have CC set rol user
+				// if (!req.body.credit_card) {
+				// 	try {
+				// 		user.rol = "2";
+				// 	} catch (error) {
+				// 		res.status(400).json({
+				// 			info: "Error in request",
+				// 			error: "description " + error,
+				// 		});
+				// 	}
+				// } else {
+				// 	// if user has CC set rol to premium
+				// 	try {
+				// 		user.rol = "5";
+				// 	} catch (error) {
+				// 		res.status(400).json({
+				// 			info: "Error in request",
+				// 			error: "description " + error,
+				// 		});
+				// 	}
+				// }
+
+				// save user
+				user.save();
+				return res
+					.status(200)
+					.json({ message: "User successfully created", user });
+			} catch (err) {
+				return res.status(500).json({ error: err });
+			}
+		})
+		.catch((err) => {
+			switch (err.name) {
+				// validation error
+				case "SequelizeValidationError":
+					return res.status(400).json({
+						message: "Validation Error",
+						errors: err.errors,
+					});
+				// unique constraint error
+				case "SequelizeUniqueConstraintError":
+					return res.status(400).json({
+						message: "Your email or Username might already in use",
+						errors: err.errors,
+					});
+				// foregin key error
+				case "SequelizeForeignKeyConstraintError":
+					return res.status(400).json({
+						message:
+							"That role doesnt exist yet, can you create it or reqest it with your web master",
+						errors: err.errors,
+					});
+				default:
+					return res.status(500).json({ error: err });
+			}
 		});
-	} catch (err) {
-		if (
-			["SequelizeValidationError", "SequelizeUniqueConstraintError"].includes(
-				err.name
-			)
-		) {
-			return res.status(400).json({
-				error: err.errors.map((e) => e.message),
-			});
-		} else {
-			throw err;
-		}
-	}
 }
 
 async function getUser(req, res) {
@@ -60,18 +116,19 @@ async function getUser(req, res) {
 	}
 }
 
+// confirm if deletable
 async function getUsers(req, res) {
 	try {
 		if (!!req.auth && req.auth.role == "admin") {
 			const users = await User.findAll({
 				include: [{ association: User.hasMany(Library) }],
 			});
-			return res.status(200).json(users);
+			return res.status(200).json({ message: "here are all the users", user });
 		}
-		const user = await User.findAll({
+		const user = await User.findAll(/*{
 			attributes: ["id", "username", "firstname", "email", "rol"],
-		});
-		res.status(200).json(user);
+		}*/);
+		res.status(200).json({ message: "here are all the users", user });
 	} catch (error) {
 		res
 			.status(400)

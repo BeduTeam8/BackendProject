@@ -1,0 +1,11 @@
+
+{
+    "username":"admin",
+    "firstname": "",
+    "lastname": "",
+    "address":"",
+    "email": "admin@localhost.com",
+    "password": "12345",
+    "phonenumber": "",
+    "rol": "1"
+}

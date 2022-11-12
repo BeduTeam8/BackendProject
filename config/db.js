@@ -1,35 +1,44 @@
 const { Sequelize } = require("sequelize");
 
-// node env development switch database
+let sequelize='';
+// node env development/staging/production switch databases
+
 if (process.env.NODE_ENV === "development") {
 	sequelize = new Sequelize(
-		process.env.PGDATABASE,
-		process.env.PGUSER,
-		process.env.PGPASSWORD,
+		process.env.DBDEV,
+		process.env.USERDEV,
+		process.env.PASSWDDEV,
 		{
-			URL: process.env.DATABASE_URL,
-			host: process.env.PGHOST,
-			dialect: "sqlite",
-			port: process.env.PORT,
+			//URL: process.env.DATABASE_URL,
+			host: process.env.HOSTDEV,
+			dialect: process.env.DIALECTDEV,
+			port: process.env.PORTDBDEV,
 		}
 	);
-} else {
+}else if (process.env.NODE_ENV === "staging") {
 	sequelize = new Sequelize(
-		process.env.PGDATABASE,
-		process.env.PGUSER,
-		process.env.PGPASSWORD,
+		process.env.DBSTG,
+		process.env.USERSTG,
+		process.env.PASSWDSTG,
 		{
-			host: process.env.PGHOST,
-			dialect: "postgres",
-			port: process.env.PORT,
-			dialectOptions: {
-				ssl: {
-					require: true,
-					rejectUnauthorized: false,
-				},
-			},
+			//URL: process.env.DATABASE_URL,
+			host: process.env.HOSTSTG,
+			dialect: process.env.DIALECTSTG,
+			port: process.env.PORTDBSTG,
+		}
+	);
+}else if (process.env.NODE_ENV === "production") {
+	sequelize = new Sequelize(
+		process.env.DBPRD,
+		process.env.USERPRD,
+		process.env.PASSWDPRD,
+		{
+			//URL: process.env.DATABASE_URL,
+			host: process.env.HOSTPRD,
+			dialect: process.env.DIALECTPRD,
+			port: process.env.PORTDBPRD,
 		}
 	);
 }
-
+	
 module.exports = sequelize;

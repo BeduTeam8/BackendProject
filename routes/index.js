@@ -4,6 +4,10 @@ const categories = require("./category");
 const editorial = require("./editorial");
 const book = require("./book");
 const library = require("./library");
+const author = require("./authors");
+const rol = require("./rol");
+const review = require("./reviews");
+const order = require("./orders");
 
 router.get("/", (req, res) => {
 	/* #swagger.tags = ['Home'];
@@ -45,4 +49,8 @@ router.use("/category", categories);
 router.use("/editorial", editorial);
 router.use("/book", book);
 router.use("/library", library);
+router.use("/author", author);
+router.use("/rol", rol);
+router.use("/review", review);
+router.use("/order", order);
 module.exports = router;

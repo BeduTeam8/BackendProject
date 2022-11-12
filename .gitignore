@@ -146,3 +146,11 @@ db.sqlite3
 db.sqlite
 
 # End of https://www.toptal.com/developers/gitignore/api/node
+
+# vscode
+.vscode
+
+#
+env.json
+config.json.env
+.env.db.old.example
