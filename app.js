@@ -23,7 +23,7 @@ try {
 		console.log("DB Authenticated");
 	});
 	sequelize.sync().then(() => {
-		console.log("DB syncronized");
+		console.log("DB syncronized " + process.env.NODE_ENV);
 	});
 
 	console.log("Connected to DB");

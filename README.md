@@ -48,7 +48,9 @@ Cada uno de las entidades tiene propiamente su CRUD pero con distintos permisos 
 ## Relacion_entidades
 
 la relación de las entidades se describen en la siguiente imagen
-![relaciion entidad](src/imgs/relacionEntidad.jpg)
+
+![relaciion entidaden Fase3](src/imgs/LibroverseF3.png)
+![relaciion entidaden Fase2](src/imgs/relacionEntidadF2.jpg)
 
 ## EndPoints
 

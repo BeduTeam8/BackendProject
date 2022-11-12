@@ -38,6 +38,7 @@
     "swagger-ui-express": "^4.5.0"
   },
   "devDependencies": {
+    "sequelize-cli": "^6.5.2",
     "sqlite3": "^5.1.2",
     "swagger-autogen": "^2.22.0"
   }

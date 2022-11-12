@@ -1,7 +1,8 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
 
-const Book = require("./book");
+//REMOVE AFTER WORK STATUS CONF
+//const Book = require("./book");
 
 const Author = sequelize.define("Authors", {
 	id: {
@@ -24,7 +25,8 @@ const Author = sequelize.define("Authors", {
 	},
 });
 
-Author.hasMany(Book);
-Book.belongsTo(Author);
+//remove after checking working status
+/*Author.hasMany(Book);
+Book.belongsTo(Author);*/  
 
 module.exports = Author;

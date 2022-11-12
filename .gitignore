@@ -149,3 +149,8 @@ db.sqlite
 
 # vscode
 .vscode
+
+#
+env.json
+config.json.env
+.env.db.old.example
