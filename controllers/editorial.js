@@ -6,10 +6,10 @@ function createEditorial(req, res) {
 	try {
 		const body = req.body;
 		Editorial.create(body).then((ed) => {
-			res.status(201).json(ed);
+			return res.status(201).json(ed);
 		});
 	} catch (error) {
-		res
+		return res
 			.status(400)
 			.json({ info: "Error in request", error: "description " + error });
 	}
@@ -30,7 +30,7 @@ async function getEditorial(req, res) {
 		}
 		res.status(200).json(ed);
 	} catch (error) {
-		res
+		return res
 			.status(400)
 			.json({ info: "Error in request", error: "description " + error });
 	}
@@ -41,7 +41,7 @@ async function getEditorials(req, res) {
 		const editorials = await Editorial.findAll({
 			include: Book,
 		});
-		res.status(200).json(editorials);
+		return res.status(200).json(editorials);
 	} catch (err) {
 		res
 			.status(400)
@@ -71,7 +71,7 @@ async function searchEditorial(req, res) {
 			res.status(200).json(ed);
 		})
 		.catch((err) => {
-			res
+			return res
 				.status(400)
 				.json({ info: "Error in request", error: "description " + err });
 		});
@@ -97,7 +97,7 @@ async function updateEditorial(req, res) {
 
 		const update = await Editorial.update(ed, { where: { name } });
 
-		res.status(200).json({ status: "Attribute was updated", ed: ed });
+		return res.status(200).json({ status: "Attribute was updated", ed: ed });
 	} catch (error) {
 		res
 			.status(400)
@@ -117,7 +117,7 @@ async function deleteEditorial(req, res) {
 				.json({ Error: "The editorial doesnt exist in DB", name });
 		}
 		await Editorial.destroy({ where: { name } });
-		res.status(200).json({ Deleted: name });
+		return res.status(200).json({ Deleted: name });
 	} catch (error) {
 		res
 			.status(400)

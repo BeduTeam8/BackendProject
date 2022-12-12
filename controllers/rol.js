@@ -6,13 +6,13 @@ const Rol = require("../models/rol");
 async function createRol(req, res) {
 	return await Rol.create(req.body)
 		.then((rol) => {
-			res.status(201).send({
+			return res.status(201).send({
 				message: "Rol creado correctamente",
 				data: rol,
 			});
 		})
 		.catch((error) => {
-			res
+			return res
 				.status(400)
 				.send({ info: "error in request", error: "description" + error });
 		});

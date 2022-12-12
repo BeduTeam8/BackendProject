@@ -7,10 +7,10 @@ function createLibrary(req, res) {
 	try {
 		const body = req.body;
 		Library.create(body).then((lib) => {
-			res.status(201).json(lib);
+			return res.status(201).json(lib);
 		});
 	} catch (error) {
-		res
+		return res
 			.status(400)
 			.json({ info: "Error in request", error: "description " + error });
 	}
@@ -59,10 +59,12 @@ async function getLibraries(req, res) {
 		],
 	})
 		.then((libraries) => {
-			res.status(200).json({ message: "heres all the libraries", libraries });
+			return res
+				.status(200)
+				.json({ message: "heres all the libraries", libraries });
 		})
 		.catch((error) => {
-			res
+			return res
 
 				.status(400)
 				.json({ info: "Check error", error: "description " + error });
@@ -91,7 +93,7 @@ async function updateLibrary(req, res) {
 
 		const update = await Library.update(lib, { where: { id } });
 
-		res.status(200).json({ status: "Attribute was updated", lib: lib });
+		return res.status(200).json({ status: "Attribute was updated", lib: lib });
 	} catch (error) {
 		res
 			.status(400)

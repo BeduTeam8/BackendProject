@@ -49,13 +49,13 @@ async function getAuthor(req, res) {
 			},
 		});
 		if (!author) {
-			res
+			return res
 				.status(404)
 				.json({ mensaje: "id not found in DB, try with another id" });
 		}
-		res.status(200).json(author);
+		return res.status(200).json(author);
 	} catch (error) {
-		res
+		return res
 			.status(400)
 			.json({ info: "Error in request", error: "description " + error });
 	}
@@ -69,9 +69,9 @@ async function getAuthors(req, res) {
 				attributes: ["book_name", "description", "AuthorId"],
 			},
 		});
-		res.status(200).json(author);
+		return res.status(200).json(author);
 	} catch (error) {
-		res
+		return res
 			.status(400)
 			.json({ info: "Error in request", error: "description " + error });
 	}

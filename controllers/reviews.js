@@ -31,8 +31,16 @@ async function getReview(req, res) {
 }
 
 async function getReviews(req, res) {
-	const reviews = await Review.findAll();
-	res.status(200).json(reviews);
+	try {
+		const reviews = await Review.findAll();
+		return res.status(200).json(reviews);
+	} catch (error) {
+		console.log(error);
+		return res.status(400).json({
+			message: "Error in request",
+			error: `description: ${error}`,
+		});
+	}
 }
 
 async function updateReview(req, res) {
@@ -81,9 +89,9 @@ async function deleteReview(req, res) {
 			return res.status(404).json({ message: "Review not found" });
 		}
 		await reviewToDeleted.destroy();
-		res.status(200).json({ message: "Review deleted", reviewToDeleted });
+		return res.status(200).json({ message: "Review deleted", reviewToDeleted });
 	} catch (error) {
-		res
+		return res
 			.status(400)
 			.json({ info: "Error in request", error: "description " + error });
 	}

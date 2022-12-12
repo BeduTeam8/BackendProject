@@ -25,7 +25,7 @@ async function createCategory(req, res) {
 			// if not exists, create
 		} else {
 			const newCategory = await Category.create(req.body);
-			res.status(201).json({ message: "Catagory created", newCategory });
+			return res.status(201).json({ message: "Catagory created", newCategory });
 		}
 	} catch (error) {
 		return res.status(400).send(error);
@@ -39,9 +39,9 @@ async function getCategory(req, res) {
 			where: { genre },
 			include: Book,
 		});
-		res.status(200).json(category);
+		return res.status(200).json(category);
 	} catch (error) {
-		res
+		return res
 			.status(400)
 			.json({ info: "Error in request", error: "description " + error });
 	}

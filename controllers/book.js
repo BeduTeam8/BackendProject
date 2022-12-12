@@ -23,31 +23,31 @@ async function createBook(req, res) {
 		.then((book) => {
 			// empty body
 			if (!req.body) {
-				res.status(400).send({
+				return res.status(400).send({
 					message: "Content can not be empty!",
 				});
 			}
 			// if book_name,
 			if (!req.body.book_name) {
-				res.status(400).send({
+				return res.status(400).send({
 					message: "book_name can not be empty!",
 				});
 			}
 			// if author_id,
 			if (!req.body.author_id) {
-				res.status(400).send({
+				return res.status(400).send({
 					message: "author_id can not be empty!",
 				});
 			}
 
 			// if category_id,
 			if (!req.body.category_id) {
-				res.status(400).send({
+				return res.status(400).send({
 					message: "category_id can not be empty!",
 				});
 			}
 			// send response
-			res.status(200).json({
+			return res.status(200).json({
 				message: "Book created sucessfully",
 				book,
 			});
@@ -99,14 +99,14 @@ async function getBook(req, res) {
 		})
 		.then((book) => {
 			if (!book) {
-				res
+				return res
 					.status(404)
 					.json({ mensaje: "id not found in DB, try with another id" });
 			}
-			res.status(200).json(book);
+			return res.status(200).json(book);
 		})
 		.catch((error) => {
-			res
+			return res
 				.status(400)
 				.json({ info: "Error in request", error: "description " + error });
 		});
@@ -114,11 +114,11 @@ async function getBook(req, res) {
 
 // search book by part of the name or full name of book
 async function getBookByName(req, res) {
-	return await book
-		.findAll({
+	try {
+		const books = await book.findAll({
 			where: {
 				book_name: {
-					[Sequelize.Op.like]: "%" + req.params.name + "%",
+					[Sequelize.Op.like]: `%${req.params.name}%`,
 				},
 			},
 			include: [
@@ -126,29 +126,34 @@ async function getBookByName(req, res) {
 				{ model: Editorial, as: "Editorial", attributes: ["name"] },
 				{ model: Category, as: "Category", attributes: ["genre"] },
 			],
-		})
-		.then((books) => {
-			if (!books) {
-				res.status(404).json({
-					mensaje: "Boo not found in DB, try with another name",
-				});
-			}
-			// if empty response
-			if (books.length == 0) {
-				res.status(404).json({
-					mensaje: "No books found with that name",
-				});
-			}
-
-			res.status(200).json(books);
-		})
-		.catch((error) => {
-			console.log(error);
-			res.status(400).json({
-				info: "Error in request",
-				error: "description " + error,
-			});
 		});
+
+		if (!books) {
+			return res.status(404).json({
+				message: "Boo not found in DB, try with another name",
+			});
+		}
+
+		if (books.length === 0) {
+			return res.status(404).json({
+				message: "No books found with that name",
+			});
+		}
+		// if empty genre send err
+		if (!req.params.name) {
+			return res.status(400).json({
+				message: "book search cant be empty",
+			});
+		}
+
+		return res.status(200).json(books);
+	} catch (error) {
+		console.log(error);
+		return res.status(400).json({
+			message: "Error in request",
+			error: `description: ${error}`,
+		});
+	}
 }
 
 // get all books
@@ -162,10 +167,10 @@ async function getBooks(req, res) {
 			],
 		})
 		.then((books) => {
-			res.status(200).json(books);
+			return res.status(200).json(books);
 		})
 		.catch((error) => {
-			res
+			return res
 				.status(400)
 				.json({ info: "Error in request", error: "description " + error });
 		});
@@ -192,9 +197,9 @@ async function updateBook(req, res) {
 		}
 		//
 		const update = await book.update(bk, { where: { id } });
-		res.status(200).json({ status: "Attribute was updated", newbk });
+		return res.status(200).json({ status: "Attribute was updated", newbk });
 	} catch (error) {
-		res
+		return res
 			.status(400)
 			.json({ info: "Error in request", error: "description " + error });
 	}
@@ -202,22 +207,20 @@ async function updateBook(req, res) {
 
 // delete book
 async function deleteBook(req, res) {
-	return await book
-		.findByPk(req.params.id)
-		.then((book) => {
-			if (!book) {
-				res
-					.status(404)
-					.json({ mensaje: "id not found in DB, try with another id" });
-			}
-			book.destroy();
-			res.status(200).json({ mensaje: "Book deleted", book });
-		})
-		.catch((error) => {
-			res
-				.status(400)
-				.json({ info: "Error in request", error: "description " + error });
-		});
+	try {
+		const book = await book.findByPk(req.params.id);
+		if (!book) {
+			return res
+				.status(404)
+				.json({ mensaje: "id not found in DB, try with another id" });
+		}
+		book.destroy();
+		return res.status(200).json({ mensaje: "Book deleted", book });
+	} catch (error) {
+		return res
+			.status(400)
+			.json({ info: "Error in request", error: `description: ${error}` });
+	}
 }
 
 module.exports = {
