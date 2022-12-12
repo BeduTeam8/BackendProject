@@ -1,7 +1,9 @@
 // const { Sequelize } = require("sequelize"); // declared but never used
 
 // import book model
-const { where } = require("sequelize");
+
+const { Sequelize } = require("sequelize");
+
 const Author = require("../models/authors");
 const book = require("../models/book");
 
@@ -110,6 +112,45 @@ async function getBook(req, res) {
 		});
 }
 
+// search book by part of the name or full name of book
+async function getBookByName(req, res) {
+	return await book
+		.findAll({
+			where: {
+				book_name: {
+					[Sequelize.Op.like]: "%" + req.params.name + "%",
+				},
+			},
+			include: [
+				{ model: Author, attributes: ["name"] },
+				{ model: Editorial, as: "Editorial", attributes: ["name"] },
+				{ model: Category, as: "Category", attributes: ["genre"] },
+			],
+		})
+		.then((books) => {
+			if (!books) {
+				res.status(404).json({
+					mensaje: "Boo not found in DB, try with another name",
+				});
+			}
+			// if empty response
+			if (books.length == 0) {
+				res.status(404).json({
+					mensaje: "No books found with that name",
+				});
+			}
+
+			res.status(200).json(books);
+		})
+		.catch((error) => {
+			console.log(error);
+			res.status(400).json({
+				info: "Error in request",
+				error: "description " + error,
+			});
+		});
+}
+
 // get all books
 async function getBooks(req, res) {
 	return await book
@@ -185,4 +226,5 @@ module.exports = {
 	getBooks,
 	updateBook,
 	deleteBook,
+	getBookByName,
 };

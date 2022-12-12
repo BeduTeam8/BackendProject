@@ -13,6 +13,7 @@ const {
 	createAuthor,
 	updateAuthor,
 	deleteAuthor,
+	searchAuthor,
 } = require("../controllers/authors");
 
 router.get(
@@ -79,6 +80,37 @@ router.post(
                "bearer": []
         }] 
   */
+);
+
+router.get(
+	"/search/:name",
+	searchAuthor
+	/*
+	  #swagger.tags = ['Authors'];
+	  #swagger.summary = 'Get Author by name';
+	  #swagger.description = 'API to get Author based on Author name';
+	  #swagger.consumes = ['application/json'];
+	  #swagger.parameters['name'] = {
+			  in: 'path',
+			  required: true,
+			  type: 'string',
+			  description: 'Author name that will be search',
+			  example: 'J.K. Rowling'
+		}
+		  #swagger.responses[200] = {
+				description: 'Author successfully obtained.',
+				schema: {
+					id: 1,
+				}
+			}
+
+		  #swagger.responses[400] = {
+				description: 'Author not found.',
+				schema: {
+					error: 'Author not found.'
+				}
+			}
+*/
 );
 
 router.put(

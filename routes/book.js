@@ -12,6 +12,7 @@ const {
 	updateBook,
 	createBook,
 	deleteBook,
+	getBookByName,
 } = require("../controllers/book");
 
 router.get(
@@ -89,6 +90,39 @@ router.post(
         }]
   */
 );
+
+router.get(
+	"/name/:name",
+	// authpassport,
+	// auth.required,
+	getBookByName
+	/*
+	  #swagger.tags = ['Books'];
+	  #swagger.summary = 'Get Book by Name';
+	  #swagger.description = 'API to get Book based on Book Name';
+	  #swagger.consumes = ['application/json'];
+	  #swagger.parameters['name'] = {
+			  in: 'path',
+			  required: true,
+			  type: 'string',
+			  description: 'Book Name that will be search',
+			  example: 'Harry Potter'
+		}
+		  #swagger.responses[200] = {
+				description: 'Book successfully obtained.',
+				schema: {
+					id: 1,
+				}
+			}
+		  #swagger.responses[400] = {
+				description: 'Book not found.',
+				schema: {
+					error: 'Book not found.'
+				}
+			}
+	*/
+);
+
 router.put(
 	"/id/:id",
 	authpassport,

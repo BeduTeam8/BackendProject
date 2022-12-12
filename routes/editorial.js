@@ -12,6 +12,7 @@ const {
 	updateEditorial,
 	deleteEditorial,
 	createEditorial,
+	searchEditorial,
 } = require("../controllers/editorial");
 
 router.get(
@@ -80,6 +81,36 @@ router.post(
         }]
   */
 );
+
+router.get(
+	"/search/:name",
+	searchEditorial
+	/*
+	  #swagger.tags = ['Editorials'];
+	  #swagger.summary = 'Search Editorial by name';
+	  #swagger.description = 'API to search Editorial based on Editorial name';
+	  #swagger.consumes = ['application/json'];
+	  #swagger.parameters['name'] = {
+			  in: 'path',
+			  required: true,
+			  type: 'string',
+			  description: 'Editorial name that will be searched',
+			  example: 'thoughtmix'}
+		  #swagger.responses[200] = {
+				description: 'Editorial successfully obtained.',
+				schema: {	
+					id: 1,
+				}	
+			}
+		  #swagger.responses[400] = {
+				description: 'Editorial not found.',
+				schema: {
+					error: 'Editorial not found.'
+				}
+			}
+*/
+);
+
 router.put(
 	"/id/:name",
 	authpassport,

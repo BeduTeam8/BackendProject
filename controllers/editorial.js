@@ -1,4 +1,4 @@
-// const { Sequelize } = require("sequelize"); // declared but not used
+const { Sequelize } = require("sequelize"); // declared but not used
 const Editorial = require("../models/editorial");
 const Book = require("../models/book");
 
@@ -20,11 +20,13 @@ async function getEditorial(req, res) {
 		const name = req.params.name;
 
 		const ed = await Editorial.findOne({
-			where: {name},
+			where: { name },
 			include: Book,
 		});
-		if (!ed){
-			return res.status(404).json({Error : "Editorial doesnt exist in DB",name})
+		if (!ed) {
+			return res
+				.status(404)
+				.json({ Error: "Editorial doesnt exist in DB", name });
 		}
 		res.status(200).json(ed);
 	} catch (error) {
@@ -47,13 +49,41 @@ async function getEditorials(req, res) {
 	}
 }
 
+// search editorial by name
+async function searchEditorial(req, res) {
+	return await Editorial.findAll({
+		where: {
+			name: {
+				[Sequelize.Op.like]: `%${req.params.name}%`,
+			},
+		},
+		include: Book,
+	})
+		.then((ed) => {
+			if (!ed) {
+				return res.status(404).json({ Error: "Editorial doesnt exist in DB" });
+			}
+			// if empty
+			if (ed.length == 0) {
+				return res.status(404).json({ Error: "Editorial not found" });
+			}
+
+			res.status(200).json(ed);
+		})
+		.catch((err) => {
+			res
+				.status(400)
+				.json({ info: "Error in request", error: "description " + err });
+		});
+}
+
 async function updateEditorial(req, res) {
 	try {
 		const name = req.params.name;
 		const ed = req.body;
 
 		const newEd = await Editorial.findOne({
-			where:{name}
+			where: { name },
 		});
 
 		for (const key in ed) {
@@ -79,13 +109,15 @@ async function deleteEditorial(req, res) {
 	try {
 		const name = req.params.name;
 		const deleteEd = await Editorial.findOne({
-			where:{name}
+			where: { name },
 		});
-		if (!deleteEd){
-			return res.status(404).json({Error: "The editorial doesnt exist in DB", name})
+		if (!deleteEd) {
+			return res
+				.status(404)
+				.json({ Error: "The editorial doesnt exist in DB", name });
 		}
 		await Editorial.destroy({ where: { name } });
-		res.status(200).json({ Deleted : name});
+		res.status(200).json({ Deleted: name });
 	} catch (error) {
 		res
 			.status(400)
@@ -99,4 +131,5 @@ module.exports = {
 	getEditorials,
 	updateEditorial,
 	deleteEditorial,
+	searchEditorial,
 };

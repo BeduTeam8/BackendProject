@@ -1,6 +1,8 @@
 const Author = require("../models/authors");
 const Book = require("../models/book");
 
+const { Sequelize } = require("sequelize");
+
 // create Author
 async function createAuthor(req, res) {
 	return await Author.create(req.body)
@@ -75,6 +77,37 @@ async function getAuthors(req, res) {
 	}
 }
 
+// Search for author
+async function searchAuthor(req, res) {
+	return await Author.findAll({
+		where: {
+			name: {
+				[Sequelize.Op.like]: "%" + req.params.name + "%",
+			},
+		},
+	})
+		.then((author) => {
+			if (!author) {
+				return res.status(400).send({
+					message: "Author Not Found",
+				});
+			}
+			// if empty
+			if (author.length == 0) {
+				return res.status(400).send({
+					message: "Author Not Found",
+				});
+			}
+			return res.status(200).send({ message: "Author found", author });
+		})
+		.catch((error) =>
+			res.status(400).send({
+				message: "Error in request",
+				error: "description " + error,
+			})
+		);
+}
+
 async function updateAuthor(req, res) {
 	try {
 		const id = req.params.id;
@@ -133,6 +166,7 @@ module.exports = {
 	createAuthor,
 	getAuthors,
 	getAuthor,
+	searchAuthor,
 	deleteAuthor,
 	updateAuthor,
 };
