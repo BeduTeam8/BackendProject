@@ -10,6 +10,13 @@ const helmet = require("helmet");
 const cors = require("cors");
 
 const app = express();
+
+// enabling CORS for some specific origins only.
+let corsOptions = {
+   origin : ['http://localhost:3000'],
+}
+
+app.use(cors(corsOptions))
 app.use(express.json());
 app.use(auth.optional);
 app.use("/", routes);
@@ -17,15 +24,7 @@ app.use("/", routes);
 // use helmet and use cors
 app.use(helmet());
 
-app.use(cors({
-    origin: '*'
-}));
-//app.use(cors({credentials: true, origin: '*'}));
-//app.use(function(req, res, next) {
-//	res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-//	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//	next();
-});
+
 
 // try {
 // 	sequelize.authenticate().then(() => {
