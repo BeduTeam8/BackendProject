@@ -18,7 +18,7 @@ app.use("/", routes);
 app.use(helmet());
 
 app.use(cors({
-    origin: 'http://localhost:3000'
+    origin: '*'
 }));
 //app.use(cors({credentials: true, origin: '*'}));
 //app.use(function(req, res, next) {
