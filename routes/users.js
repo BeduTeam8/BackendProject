@@ -41,7 +41,7 @@ router.get(
 );
 router.get(
 	"/id/:id",
-	auth.isAdmin,
+	// auth.isAdmin,
 	getUser
 	/*
   #swagger.tags = ['Users'];
@@ -67,9 +67,6 @@ router.get(
 				error: 'User not found.'
 			}
   }
-  #swagger.security = [{
-               "bearer": []
-        }] 
   */
 );
 
