@@ -14,14 +14,14 @@ const app = express();
 // enabling CORS for some specific origins only.
 
 let corsOptions = {
-   origin : ['http://localhost:3000'],
+   origin : ['https://main--extraordinary-baklava-b8b002.netlify.app/'],
 	
 }
 
 app.use(cors(corsOptions))
 //app.use(cors())
 //app.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "https://639a7fa9878d176c0991cab7--extraordinary-baklava-b8b002.netlify.app/");
+//   res.header("Access-Control-Allow-Origin", "https://main--extraordinary-baklava-b8b002.netlify.app/");
 //   res.header('Access-Control-Allow-Methods', 'DELETE, PUT, GET, POST');
 //   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 //   next();
