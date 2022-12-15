@@ -13,7 +13,7 @@ const app = express();
 
 // enabling CORS for some specific origins only.
 let corsOptions = {
-   origin : ['https://frontendreact-production.up.railway.app'],
+   origin : ['https://up.railway.app'],
 }
 
 app.use(cors(corsOptions))
