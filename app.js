@@ -14,7 +14,7 @@ const app = express();
 // enabling CORS for some specific origins only.
 
 let corsOptions = {
-   origin : ['https://extraordinary-baklava-b8b002.netlify.app/',
+   origin : ['https://extraordinary-baklava-b8b002.netlify.app',
 	     'https://main--extraordinary-baklava-b8b002.netlify.app',
 	     'http://localhost:3001',
 	     'http://localhost:3000'],
