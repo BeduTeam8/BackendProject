@@ -12,11 +12,19 @@ const cors = require("cors");
 const app = express();
 
 // enabling CORS for some specific origins only.
-let corsOptions = {
-   origin : ['https://up.railway.app'],
-}
+//let corsOptions = {
+//   origin : ['https://frontendreact-production.up.railway.app/'],
+	
+//}
 
-app.use(cors(corsOptions))
+//app.use(cors(corsOptions))
+app.use(cors())
+app.use(function(req, res, next) {
+   res.header("Access-Control-Allow-Origin", "https://frontendreact-production.up.railway.app/");
+   res.header('Access-Control-Allow-Methods', 'DELETE, PUT, GET, POST');
+   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+   next();
+});
 app.use(express.json());
 app.use(auth.optional);
 app.use("/", routes);
